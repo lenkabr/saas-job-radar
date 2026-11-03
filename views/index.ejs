@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CZ & SK SaaS Job Radar</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0d090b;
+      --bg-soft: #120d0f;
+      --surface: #171113;
+      --surface-raised: #1c1417;
+
+      --border: rgba(255, 255, 255, 0.075);
+      --border-strong: rgba(255, 255, 255, 0.12);
+
+      --burgundy: #8f2947;
+      --burgundy-bright: #c3476b;
+      --burgundy-soft: rgba(143, 41, 71, 0.14);
+      --new-accent: #c89b63;
+      --new-soft: rgba(200, 155, 99, 0.10);
+
+      --text: #f4eff0;
+      --text-soft: #c4b9bc;
+      --text-muted: #776c70;
+
+      --radius: 12px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at 78% 4%,
+          rgba(143, 41, 71, 0.09),
+          transparent 31rem
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* SUBTLE GRAIN */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+
+      opacity: 0.015;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.9'/%3E%3C/svg%3E");
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 80px 0 100px;
+    }
+
+    /* --------------------------------
+       HERO
+    -------------------------------- */
+
+    .hero {
+      position: relative;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      color: var(--burgundy-bright);
+
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+
+      margin-bottom: 22px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--burgundy-bright);
+    }
+
+    h1 {
+      margin: 0;
+
+      max-width: 820px;
+
+      font-size: clamp(50px, 8vw, 88px);
+      line-height: 0.92;
+      letter-spacing: -5px;
+      font-weight: 680;
+    }
+
+    .intro {
+      max-width: 600px;
+
+      margin: 30px 0 0;
+
+      color: var(--text-soft);
+
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    /* HERO NUMBERS */
+
+    .hero-stats {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+
+      margin-top: 52px;
+    }
+
+    .hero-stat {
+      min-width: 180px;
+      padding-right: 44px;
+    }
+
+    .hero-stat + .hero-stat {
+      padding-left: 44px;
+      border-left: 1px solid var(--border);
+    }
+
+    .stat-number {
+      display: block;
+
+      font-size: 42px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -2px;
+    }
+
+    .hero-stat.new .stat-number {
+      color: var(--new-accent);
+    }
+
+    .stat-label {
+      display: block;
+
+      margin-top: 9px;
+
+      color: var(--text-muted);
+
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* --------------------------------
+       WHAT'S NEW
+    -------------------------------- */
+
+    .changes {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+
+      margin-top: 28px;
+      padding: 24px 0;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .changes-label {
+      color: var(--text-muted);
+
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+
+      padding-top: 7px;
+    }
+
+    .change-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .change-pill {
+      padding: 7px 12px;
+
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+
+      color: var(--text-soft);
+
+      font-size: 12px;
+    }
+
+    .change-pill strong {
+  color: var(--new-accent);
+  margin-right: 4px;
+}
+
+    /* --------------------------------
+       FILTERS
+    -------------------------------- */
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+
+      margin-top: 40px;
+      padding: 0 0 40px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    label {
+      color: var(--text-muted);
+
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    select {
+      width: 100%;
+      height: 46px;
+
+      padding: 0 14px;
+
+      appearance: none;
+
+      background:
+        linear-gradient(
+          45deg,
+          transparent 50%,
+          var(--text-muted) 50%
+        ) calc(100% - 18px) 20px / 5px 5px no-repeat,
+
+        linear-gradient(
+          135deg,
+          var(--text-muted) 50%,
+          transparent 50%
+        ) calc(100% - 13px) 20px / 5px 5px no-repeat,
+
+        var(--surface);
+
+      color: var(--text);
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      font-size: 13px;
+
+      outline: none;
+      cursor: pointer;
+
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease;
+    }
+
+    select:hover {
+      border-color: var(--border-strong);
+    }
+
+    select:focus {
+      border-color: rgba(195, 71, 107, 0.6);
+    }
+
+    button {
+      height: 46px;
+
+      padding: 0 22px;
+
+      border: 1px solid var(--burgundy);
+      border-radius: 8px;
+
+      background: var(--burgundy);
+      color: #fff;
+
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+
+      cursor: pointer;
+
+      transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease;
+    }
+
+    button:hover {
+      background: #a43354;
+      border-color: #a43354;
+      transform: translateY(-1px);
+    }
+
+    /* --------------------------------
+       RESULTS
+    -------------------------------- */
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      margin: 48px 0 14px;
+    }
+
+    .results-header h2 {
+      margin: 0;
+
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1px;
+    }
+
+    .results-count {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* --------------------------------
+       JOB LIST
+    -------------------------------- */
+
+    .jobs {
+      border-top: 1px solid var(--border);
+    }
+
+    .job-card {
+      position: relative;
+
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+
+      padding: 26px 4px;
+
+      border-bottom: 1px solid var(--border);
+
+      transition:
+        background 180ms ease,
+        padding 180ms ease;
+    }
+
+    .job-card:hover {
+      padding-left: 14px;
+      padding-right: 14px;
+
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .job-card.is-new {
+      padding-left: 22px;
+      background:
+    linear-gradient(
+      90deg,
+      var(--new-soft),
+      transparent 42%
+        );
+    }
+
+    .job-card.is-new::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 24px;
+      bottom: 24px;
+      
+      width: 2px;
+      background: var(--new-accent);
+      
+      border-radius: 2px;
+    }
+
+    /* COMPANY COLUMN */
+
+    .job-company-column {
+      min-width: 0;
+    }
+
+    .company {
+      display: block;
+
+      color: var(--burgundy-bright);
+
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .team-pill {
+      display: inline-block;
+
+      margin-top: 9px;
+      padding: 4px 8px;
+
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+
+      color: var(--text-muted);
+
+      font-size: 10px;
+      font-weight: 650;
+    }
+
+    /* MAIN JOB INFO */
+
+    .job-main {
+      min-width: 0;
+    }
+
+    .job-heading {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .job-title {
+      margin: 0;
+
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: -0.3px;
+      font-weight: 580;
+    }
+
+    .new-badge {
+      padding: 4px 7px;
+
+      background: var(--new-soft);
+      border: 1px solid rgba(200, 155, 99, 0.25);
+      color: var(--new-accent);
+
+      color: #fff;
+
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+
+      margin-top: 9px;
+
+      color: var(--text-muted);
+
+      font-size: 12px;
+    }
+
+    .meta-divider {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #51464a;
+    }
+
+    /* LINK */
+
+    .job-action {
+      display: flex;
+      align-items: center;
+    }
+
+    .job-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 9px 0;
+
+      color: var(--text-soft);
+
+      text-decoration: none;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      white-space: nowrap;
+
+      transition:
+        color 160ms ease,
+        gap 160ms ease;
+    }
+
+    .job-link span {
+      color: var(--burgundy-bright);
+      font-size: 15px;
+    }
+
+    .job-link:hover {
+      color: var(--text);
+      gap: 12px;
+    }
+
+    /* --------------------------------
+       EMPTY STATE
+    -------------------------------- */
+
+    .empty-state {
+      padding: 80px 20px;
+
+      border-bottom: 1px solid var(--border);
+
+      text-align: center;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 8px;
+
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .empty-state p {
+      margin: 0;
+
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* --------------------------------
+       MOBILE
+    -------------------------------- */
+
+    @media (max-width: 800px) {
+
+      .container {
+        width: min(100% - 32px, 1160px);
+        padding: 52px 0 70px;
+      }
+
+      h1 {
+        letter-spacing: -3px;
+      }
+
+      .hero {
+        padding-bottom: 45px;
+      }
+
+      .hero-stats {
+        margin-top: 40px;
+      }
+
+      .hero-stat {
+        min-width: 0;
+        flex: 1;
+        padding-right: 24px;
+      }
+
+      .hero-stat + .hero-stat {
+        padding-left: 24px;
+      }
+
+      .stat-number {
+        font-size: 34px;
+      }
+
+      .changes {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .job-card {
+        grid-template-columns: 1fr;
+        gap: 15px;
+
+        padding: 22px 2px;
+      }
+
+      .job-card:hover {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .job-company-column {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .team-pill {
+        margin-top: 0;
+      }
+
+      .job-action {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <!-- HERO -->
+
+    <header class="hero">
+
+      <div class="eyebrow">
+        CZ & SK SaaS
+      </div>
+
+      <h1>
+        Job Radar
+      </h1>
+
+      <p class="intro">
+        Open roles from selected Czech and Slovak SaaS and technology companies,
+  collected in one place.
+      </p>
+
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+
+          <span class="stat-number">
+            <%= jobs.length %>
+          </span>
+
+          <span class="stat-label">
+            Open roles
+          </span>
+
+        </div>
+
+
+        <div class="hero-stat new">
+
+          <span class="stat-number">
+            <%= newJobsCount %>
+          </span>
+
+          <span class="stat-label">
+  <% if (previousScanAt) { %>
+    New since
+    <%= new Date(previousScanAt).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short"
+    }) %>
+  <% } else { %>
+    New since last scan
+  <% } %>
+</span>>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- WHAT'S NEW -->
+
+    <% if (newJobsCount > 0) { %>
+
+      <section class="changes">
+
+        <div class="changes-label">
+          Latest changes
+        </div>
+
+        <div class="change-items">
+
+          <% for (const [company, count] of Object.entries(newJobsByCompany)) { %>
+
+            <span class="change-pill">
+
+              <strong>
+                +<%= count %>
+              </strong>
+
+              <%= company %>
+
+            </span>
+
+          <% } %>
+
+        </div>
+
+      </section>
+
+    <% } %>
+
+
+    <!-- FILTERS -->
+
+    <form class="filters" action="/" method="GET">
+
+      <div class="filter-group">
+
+        <label for="country">
+          Company origin
+        </label>
+
+        <select name="country" id="country">
+
+          <option value="">
+            All origins
+          </option>
+
+          <% for (const country of countries) { %>
+
+            <option
+              value="<%= country.company_country %>"
+              <%= selectedCountry === country.company_country ? "selected" : "" %>
+            >
+              <%= country.company_country %>
+            </option>
+
+          <% } %>
+
+        </select>
+
+      </div>
+
+
+      <div class="filter-group">
+
+        <label for="company">
+          Company
+        </label>
+
+        <select name="company" id="company">
+
+          <option value="">
+            All companies
+          </option>
+
+          <% for (const company of companies) { %>
+
+            <option
+              value="<%= company.company %>"
+              <%= selectedCompany === company.company ? "selected" : "" %>
+            >
+              <%= company.company %>
+            </option>
+
+          <% } %>
+
+        </select>
+
+      </div>
+
+
+      <div class="filter-group">
+
+        <label for="team">
+          Team
+        </label>
+
+        <select name="team" id="team">
+
+          <option value="">
+            All teams
+          </option>
+
+          <% for (const team of teams) { %>
+
+            <option
+              value="<%= team.team %>"
+              <%= selectedTeam === team.team ? "selected" : "" %>
+            >
+              <%= team.team %>
+            </option>
+
+          <% } %>
+
+        </select>
+
+      </div>
+
+
+      <button type="submit">
+        Apply filters
+      </button>
+
+    </form>
+
+
+    <!-- RESULTS -->
+
+    <section>
+
+      <div class="results-header">
+
+        <h2>
+          Open positions
+        </h2>
+
+        <span class="results-count">
+          <%= jobs.length %> results
+        </span>
+
+      </div>
+
+
+      <div class="jobs">
+
+        <% if (jobs.length === 0) { %>
+
+          <div class="empty-state">
+
+            <h3>
+              Nothing here.
+            </h3>
+
+            <p>
+              Try changing your filters.
+            </p>
+
+          </div>
+
+        <% } %>
+
+
+        <% for (const job of jobs) { %>
+
+          <article class="job-card <%= job.is_new ? 'is-new' : '' %>">
+
+
+            <!-- COMPANY -->
+
+            <div class="job-company-column">
+
+              <span class="company">
+                <%= job.company %>
+              </span>
+
+              <% if (job.team) { %>
+
+                <span class="team-pill">
+                  <%= job.team %>
+                </span>
+
+              <% } %>
+
+            </div>
+
+
+            <!-- JOB -->
+
+            <div class="job-main">
+
+              <div class="job-heading">
+
+                <h3 class="job-title">
+                  <%= job.job_title %>
+                </h3>
+
+
+                <% if (job.is_new) { %>
+
+                  <span class="new-badge">
+                    NEW
+                  </span>
+
+                <% } %>
+
+              </div>
+
+
+              <div class="job-meta">
+
+                <% if (job.location) { %>
+
+                  <span>
+                    <%= job.location %>
+                  </span>
+
+                <% } %>
+
+
+                <% if (job.location && job.department) { %>
+
+                  <span class="meta-divider"></span>
+
+                <% } %>
+
+
+                <% if (job.department) { %>
+
+                  <span>
+                    <%= job.department %>
+                  </span>
+
+                <% } %>
+
+              </div>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="job-action">
+
+              <a
+                class="job-link"
+                href="<%= job.job_url %>"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View role
+                <span>↗</span>
+              </a>
+
+            </div>
+
+          </article>
+
+        <% } %>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+
+</html>
